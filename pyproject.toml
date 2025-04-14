@@ -1,5 +1,5 @@
 [project]
-name = "kmls"
+name = "kazemlstack"
 version = "0.1.0"
 description = "Kaze MLOps stack"
 readme = "README.md"
@@ -25,12 +25,12 @@ cuda = [
 [tool.uv]
 dev-dependencies = [
     "ipython>=9.1.0",
-    "kmls",
+    "kazemlstack",
     "pytest>=8.3.5",
 ]
 
 [tool.uv.sources]
-kmls = { workspace = true }
+kazemlstack = { workspace = true }
 
 
 [build-system]
