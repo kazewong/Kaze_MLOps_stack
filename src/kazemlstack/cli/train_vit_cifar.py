@@ -18,7 +18,7 @@ def train(
     learning_rate: float = 0.001,
     momentum: float = 0.9,
 ):
-    pass    
+    print(1)    
 
 if __name__ == '__main__':
    fire.Fire(train)

@@ -726,11 +726,10 @@ wheels = [
 [[package]]
 name = "fire"
 version = "0.7.0"
-source = { registry = "https://pypi.org/simple" }
+source = { git = "https://github.com/google/python-fire#45152e18255e5c5803f3805604eb738c50befeff" }
 dependencies = [
     { name = "termcolor" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/6b/b6/82c7e601d6d3c3278c40b7bd35e17e82aa227f050aa9f66cb7b7fce29471/fire-0.7.0.tar.gz", hash = "sha256:961550f07936eaf65ad1dc8360f2b2bf8408fad46abbfa4d2a3794f8d2a95cdf", size = 87189 }
 
 [[package]]
 name = "flask"
@@ -1338,6 +1337,56 @@ wheels = [
 ]
 
 [[package]]
+name = "kazemlstack"
+version = "0.1.0"
+source = { editable = "." }
+dependencies = [
+    { name = "bentoml" },
+    { name = "chex" },
+    { name = "dagster" },
+    { name = "fire" },
+    { name = "flax" },
+    { name = "grain" },
+    { name = "jaxtyping" },
+    { name = "minio" },
+    { name = "mlflow" },
+    { name = "optax" },
+]
+
+[package.optional-dependencies]
+cuda = [
+    { name = "jax", extra = ["cuda"] },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "ipython" },
+    { name = "pytest" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "bentoml", specifier = ">=1.4.8" },
+    { name = "chex", specifier = ">=0.1.89" },
+    { name = "dagster", specifier = ">=1.10.10" },
+    { name = "fire", git = "https://github.com/google/python-fire" },
+    { name = "flax", specifier = ">=0.10.5" },
+    { name = "grain", specifier = ">=0.2.7" },
+    { name = "jax", extras = ["cuda"], marker = "extra == 'cuda'", specifier = ">=0.5.3" },
+    { name = "jaxtyping", specifier = ">=0.3.1" },
+    { name = "minio", specifier = ">=7.2.15" },
+    { name = "mlflow", specifier = ">=2.21.3" },
+    { name = "optax", specifier = ">=0.2.4" },
+]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "ipython", specifier = ">=9.1.0" },
+    { name = "kazemlstack", editable = "." },
+    { name = "pytest", specifier = ">=8.3.5" },
+]
+
+[[package]]
 name = "kiwisolver"
 version = "1.4.8"
 source = { registry = "https://pypi.org/simple" }
@@ -1386,56 +1435,6 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/05/f9/27e94c1b3eb29e6933b6986ffc5fa1177d2cd1f0c8efc5f02c91c9ac61de/kiwisolver-1.4.8-cp313-cp313t-musllinux_1_2_ppc64le.whl", hash = "sha256:151dffc4865e5fe6dafce5480fab84f950d14566c480c08a53c663a0020504b6", size = 2390661 },
     { url = "https://files.pythonhosted.org/packages/d9/d4/3c9735faa36ac591a4afcc2980d2691000506050b7a7e80bcfe44048daa7/kiwisolver-1.4.8-cp313-cp313t-musllinux_1_2_s390x.whl", hash = "sha256:577facaa411c10421314598b50413aa1ebcf5126f704f1e5d72d7e4e9f020d90", size = 2546710 },
     { url = "https://files.pythonhosted.org/packages/4c/fa/be89a49c640930180657482a74970cdcf6f7072c8d2471e1babe17a222dc/kiwisolver-1.4.8-cp313-cp313t-musllinux_1_2_x86_64.whl", hash = "sha256:be4816dc51c8a471749d664161b434912eee82f2ea66bd7628bd14583a833e85", size = 2349213 },
-]
-
-[[package]]
-name = "kmls"
-version = "0.1.0"
-source = { editable = "." }
-dependencies = [
-    { name = "bentoml" },
-    { name = "chex" },
-    { name = "dagster" },
-    { name = "fire" },
-    { name = "flax" },
-    { name = "grain" },
-    { name = "jaxtyping" },
-    { name = "minio" },
-    { name = "mlflow" },
-    { name = "optax" },
-]
-
-[package.optional-dependencies]
-cuda = [
-    { name = "jax", extra = ["cuda"] },
-]
-
-[package.dev-dependencies]
-dev = [
-    { name = "ipython" },
-    { name = "pytest" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "bentoml", specifier = ">=1.4.8" },
-    { name = "chex", specifier = ">=0.1.89" },
-    { name = "dagster", specifier = ">=1.10.10" },
-    { name = "fire", specifier = ">=0.7.0" },
-    { name = "flax", specifier = ">=0.10.5" },
-    { name = "grain", specifier = ">=0.2.7" },
-    { name = "jax", extras = ["cuda"], marker = "extra == 'cuda'", specifier = ">=0.5.3" },
-    { name = "jaxtyping", specifier = ">=0.3.1" },
-    { name = "minio", specifier = ">=7.2.15" },
-    { name = "mlflow", specifier = ">=2.21.3" },
-    { name = "optax", specifier = ">=0.2.4" },
-]
-
-[package.metadata.requires-dev]
-dev = [
-    { name = "ipython", specifier = ">=9.1.0" },
-    { name = "kmls", editable = "." },
-    { name = "pytest", specifier = ">=8.3.5" },
 ]
 
 [[package]]
