@@ -3,7 +3,7 @@ import jax
 import jax.numpy as jnp
 import optax
 
-from kmls.model.ViT import VisionTransformer
+from kazemlstack.model.ViT import VisionTransformer
 
 def train_step(
         
