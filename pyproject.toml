@@ -1,7 +1,7 @@
 [project]
-name = "kaze-mlops-stack"
+name = "kmls"
 version = "0.1.0"
-description = "Add your description here"
+description = "Kaze MLOps stack"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
@@ -22,8 +22,17 @@ cuda = [
     "jax[cuda]>=0.5.3",
 ]
 
-[dependency-groups]
-dev = [
+[tool.uv]
+dev-dependencies = [
     "ipython>=9.1.0",
+    "kmls",
     "pytest>=8.3.5",
 ]
+
+[tool.uv.sources]
+kmls = { workspace = true }
+
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
