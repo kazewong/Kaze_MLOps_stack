@@ -10,7 +10,7 @@ class AttentionBlock(nnx.Module):
 
     def __init__(
         self,
-        rng_seed: Int,
+        rngs: nnx.Rngs,
         embed_dim: Int,
         hidden_dim: Int,
         qkv_dim: Int,
@@ -24,20 +24,20 @@ class AttentionBlock(nnx.Module):
             out_features=embed_dim,
             decode=False,
             dropout_rate=dropout_rate,
-            rngs=nnx.Rngs(rng_seed),
+            rngs=rngs,
         )
         self.layer_norm1 = nnx.LayerNorm(
-            num_features=embed_dim, rngs=nnx.Rngs(rng_seed + 1)
+            num_features=embed_dim, rngs=rngs
         )
         self.layer_norm2 = nnx.LayerNorm(
-            num_features=embed_dim, rngs=nnx.Rngs(rng_seed + 2)
+            num_features=embed_dim, rngs=rngs
         )
-        self.dropout = nnx.Dropout(dropout_rate, rngs=nnx.Rngs(rng_seed + 3))
+        self.dropout = nnx.Dropout(dropout_rate, rngs=rngs)
         self.linear_block = nnx.Sequential(
-            nnx.Linear(embed_dim, hidden_dim, rngs=nnx.Rngs(rng_seed + 4)),
+            nnx.Linear(embed_dim, hidden_dim, rngs=rngs),
             nnx.gelu,
-            nnx.Dropout(dropout_rate, rngs=nnx.Rngs(rng_seed + 5)),
-            nnx.Linear(hidden_dim, embed_dim, rngs=nnx.Rngs(rng_seed + 6)),
+            nnx.Dropout(dropout_rate, rngs=rngs),
+            nnx.Linear(hidden_dim, embed_dim, rngs=rngs),
         )
 
     def __call__(self, x: Float[Array, "n_token n_embed"]) -> Float[Array, "n_token n_embed"]:
@@ -56,7 +56,7 @@ class VisionTransformer(nnx.Module):
 
     def __init__(
         self,
-        rng_seed: int,
+        rngs: nnx.Rngs,
         embed_dim: Int,  # Dimensionality of input and attention feature vectors
         hidden_dim: int,  # Dimensionality of hidden layer in feed-forward network
         num_heads: int,  # Number of heads to use in the Multi-Head Attention block
@@ -70,14 +70,14 @@ class VisionTransformer(nnx.Module):
         self.num_patches = num_patches
 
         self.linear_projector = nnx.Linear(
-            patch_size * patch_size * num_channels, embed_dim, rngs=nnx.Rngs(rng_seed)
+            patch_size * patch_size * num_channels, embed_dim, rngs=rngs
         )
         self.attention_blocks = nnx.Sequential(*[
-            AttentionBlock(rng_seed + i + 1, embed_dim, hidden_dim, embed_dim, num_heads)
+            AttentionBlock(rngs, embed_dim, hidden_dim, embed_dim, num_heads)
             for i in range(num_layers)
         ])
-        self.dropout_block = nnx.Dropout(dropout_prob, rngs=nnx.Rngs(rng_seed + num_layers + 1))
-        self.positional_embedding = nnx.Embed(num_embeddings=num_patches, features=embed_dim, rngs=nnx.Rngs(rng_seed + num_layers + 2))
+        self.dropout_block = nnx.Dropout(dropout_prob, rngs=rngs)
+        self.positional_embedding = nnx.Embed(num_embeddings=num_patches, features=embed_dim, rngs=rngs)
 
     def __call__(
         self, images: Int[Array, "C H W"], inference: bool = False
