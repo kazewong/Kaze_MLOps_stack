@@ -1,14 +1,12 @@
 import fire
 import jax
 import jax.numpy as jnp
-import flax.nnx as nnx
+from flax import nnx
 import optax
+from jaxtyping import Array, Float, Int
 
 from kazemlstack.model.ViT import VisionTransformer
 
-
-def train_step():
-    pass
 
 def test_model():
     model = VisionTransformer(
@@ -29,9 +27,24 @@ def test_model():
     test_output = nnx.jit(nnx.vmap(single_eval))(test_input)
     print(test_output.shape)  # Should be (10, 64, 16)
 
+def loss_fn(model: VisionTransformer, batch: Float[Array, "n_batch n_channel n_height n_width"]):
+    logits = model(batch["image"])
+    loss = nnx.CrossEntropyLoss()(logits, batch["label"])
+    return loss, logits
 
+@nnx.jit
+def train_step(model: VisionTransformer, optimizer: nnx.Optimizer, metrics: nnx.MultiMetric, batch):
+    grad_fn = nnx.value_and_grad(loss_fn, has_aux=True)
+    (loss, logits), grads = grad_fn(model, batch)
+    optimizer.update(grads)
+    metrics.update(loss=loss, logits=logits, labels=batch["label"])
 
-def train(
+@nnx.jit
+def eval_step(model: VisionTransformer, metrics: nnx.MultiMetric, batch):
+    loss, logits = loss_fn(model, batch)
+    metrics.update(loss=loss, logits=logits, labels=batch["label"])
+
+def train_model(
     num_epochs: int = 100,
     batch_size: int = 128,
     learning_rate: float = 0.001,
@@ -47,6 +60,12 @@ def train(
         patch_size=4,
         num_patches=64,
     )
+    optimizer = nnx.Optimizer(model, optax.adamw(learning_rate=learning_rate, b1=momentum))
+    metrics = nnx.MultiMetric(
+        accuracy=nnx.metrics.Accuracy(),
+        loss=nnx.metrics.Average('loss'),
+    )
+
 
 
 if __name__ == "__main__":
